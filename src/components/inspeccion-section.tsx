@@ -84,11 +84,11 @@ export function InspeccionSection() {
   const incorrectCount = components.filter((c) => c.result === "incorrecto").length
 
   return (
-    <div className="h-full relative">
-      {/* LEFT: Camera area - normal flow, half width */}
+    <div className="h-full lg:relative">
+      {/* LEFT: Camera area - normal flow, half width on lg */}
       <div className="lg:w-1/2 lg:pr-6 flex flex-col gap-4">
         {/* Camera feed - flush with header, left edge and table */}
-        <div className="relative bg-card overflow-hidden -mt-4 md:-mt-6 -ml-4 md:-ml-6 lg:-mr-9">
+        <div className="relative bg-card overflow-hidden -mt-4 md:-mt-6 -mx-4 md:-mx-6 lg:-mr-9">
           <div className="aspect-video bg-secondary/80 flex items-center justify-center relative">
             {/* Simulated camera overlay */}
             <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.012)_2px,rgba(255,255,255,0.012)_4px)]" />
@@ -143,8 +143,8 @@ export function InspeccionSection() {
           disabled={isInspecting}
           className={cn(
             "py-4 text-base font-bold uppercase tracking-widest transition-all",
-            "-mt-4 -ml-4 md:-ml-6 lg:-mr-9",
-            "w-[calc(100%+1rem)] md:w-[calc(100%+1.5rem)] lg:w-[calc(100%+1.5rem+2.25rem)]",
+            "-mt-4 -mx-4 md:-mx-6 lg:-mr-9",
+            "w-[calc(100%+2rem)] md:w-[calc(100%+3rem)] lg:w-[calc(100%+1.5rem+2.25rem)]",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             isInspecting
               ? "bg-destructive/50 text-destructive-foreground cursor-not-allowed opacity-70"
@@ -183,9 +183,15 @@ export function InspeccionSection() {
         )}
       </div>
 
-      {/* RIGHT: Components table - absolutely positioned, full height from header to bottom */}
+      {/* Components table - stacked below on mobile, absolutely positioned on lg */}
       <div
-        className="hidden lg:flex flex-col absolute -top-4 md:-top-6 -right-4 md:-right-6 -bottom-4 md:-bottom-6 left-[calc(50%+0.75rem)] overflow-hidden"
+        className={cn(
+          "flex flex-col overflow-hidden",
+          /* Mobile: normal flow, full width, flush edges */
+          "mt-4 -mx-4 md:-mx-6 -mb-4 md:-mb-6",
+          /* Desktop: absolute positioned right panel */
+          "lg:absolute lg:mt-0 lg:mx-0 lg:mb-0 lg:-top-4 lg:md:-top-6 lg:-right-4 lg:md:-right-6 lg:-bottom-4 lg:md:-bottom-6 lg:left-[calc(50%+0.75rem)]"
+        )}
       >
         <div className="bg-card border border-border flex flex-col h-full">
           {/* Table header */}
@@ -194,13 +200,13 @@ export function InspeccionSection() {
             <div className="w-[45%] px-3 py-2 text-xs font-medium text-muted-foreground">Componente</div>
             <div className="w-[40%] px-3 py-2 text-xs font-medium text-muted-foreground text-center">Resultado</div>
           </div>
-          {/* Table rows - flex to fill available space evenly */}
+          {/* Table rows */}
           <div className="flex-1 flex flex-col min-h-0">
             {components.map((comp) => (
               <div
                 key={comp.id}
                 className={cn(
-                  "flex flex-1 items-center border-b border-border last:border-b-0 transition-colors duration-300 min-h-0",
+                  "flex items-center border-b border-border last:border-b-0 transition-colors duration-300 min-h-0 py-2 lg:py-0 lg:flex-1",
                   comp.result === "correcto" && "bg-success/5",
                   comp.result === "incorrecto" && "bg-destructive/5"
                 )}
